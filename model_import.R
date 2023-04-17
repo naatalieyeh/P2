@@ -11,6 +11,4 @@ install_keras()
 setwd("/Users/natalieyeh/Desktop/P2")
 model <- load_model_tf("./dandelion_model")
 
-# hi
-
-# test branch change
+# second try hi commit
