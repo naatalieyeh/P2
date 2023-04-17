@@ -8,7 +8,7 @@ library("tensorflow")
 library("reticulate")
 install_tensorflow(extra_packages = "pillow")
 install_keras()
-setwd("/Users/natalieyeh/Desktop/P2")
+setwd("/Users/natalieyeh/Desktop/P2\ Model\ Setup")
 model <- load_model_tf("./dandelion_model")
 
 # second try hi commit
