@@ -32,7 +32,7 @@ showstringspaces=false
 \newcommand{\problemnumber}{0}
 \pagestyle{fancy}
 \fancyhead{}
-\fancyhead[L]{\textbf{Question \problemnumber}}
+%\fancyhead[L]{\textbf{Question \problemnumber}}
 \newcommand{\newquestion}[1]{
 \clearpage % page break and flush floats
 \renewcommand{\problemnumber}{#1} % set problem number for header
@@ -53,9 +53,9 @@ showstringspaces=false
 \vspace*{0.5in}
 
 \begin{center}
-\Huge{{\bf IE332 Assignment \#x}} % <-- replace with correct assignment #
+\Huge{{\bf IE332 Project \#2}} % <-- replace with correct assignment #
 
-Due: Month Date th, 11:59pm EST % <-- replace with correct due date and time
+Due: April 28th, 11:59pm EST % <-- replace with correct due date and time
 \end{center}
 
 \vspace{0.3in}
@@ -73,13 +73,15 @@ Accountable together -- we are Purdue.''}
   \begin{center}
     \label{tab:table1}
     \begin{tabular}{c|cc|c|c}
-      Student & Q1 & Q2 & Overall & DIFF\\
+      Student & Algorithm Research & Overall & DIFF\\
       \hline
-      A & 50 & 33 & 83 & 17\\
-      B & 50 & 33 & 83 & 17\\
-      C & 0 & 33 & 33 & -33\\
+      Natalie & 20 & 20 & 20\\
+      Jakob & 20 & 20 & 20\\
+      Jack & 20 & 20 & 20\\
+      Alex & 20 & 20 & 20\\
+      Kento & 20 & 20 & 20\\
       \hline
-      St Dev & 29 & 0 & 29 & 29
+      St Dev & 29 & 29 & 29
     \end{tabular}
   \end{center}
 \end{table}
@@ -140,21 +142,32 @@ Accountable together -- we are Purdue.''}
 \addtodo
 
 % BEGIN YOUR ASSIGNMENT HERE:
+\newpage
+\tableofcontents
 
-% Question 1
-\newquestion{1}
+% Algorithm Research
+\newpage
+\section{Algorithm Research}
+%Weighted Mojority Classifier
+\subsection{Weighted Majority Classifier}
 
-\noindent Example of proper typesetting of quotation marks:\\
-``proper opening and closing quotation marks'' vs "bad quotation marks".
+%sub-algorithm one
+\subsection{Fast Gradient Sign Method}
 
-% Question 2
-\newquestion{2}
+%sub-alorithm two
+\subsection{L-BFGS}
 
-Example of how to typeset and submit code in Latex:
-\begin{lstlisting}[language=R, frame=single]
-#EXAMPLE R CODE
-x <- c(1,2,3)
-\end{lstlisting}
+%sub-algorithm three
+\subsection{Jacobian-based Saliency Map Attack}
 
+%sub-algorithm four
+\subsection{Deepfool Attack}
+
+%sub-algorithm five:
+\subsection{Zeroth-order optimization attack}
+
+%sources section
+\newpage
+\section{Resources}
 
 \end{document}
