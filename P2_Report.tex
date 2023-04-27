@@ -73,15 +73,15 @@ Accountable together -- we are Purdue.''}
   \begin{center}
     \label{tab:table1}
     \begin{tabular}{c|cc|c|c}
-      Student & Algorithm Research & Overall & DIFF\\
+      Student & Research & Implementation & Report & Overall & DIFF\\
       \hline
-      Natalie & 20 & 20 & 20\\
-      Jakob & 20 & 20 & 20\\
-      Jack & 20 & 20 & 20\\
-      Alex & 20 & 20 & 20\\
-      Kento & 20 & 20 & 20\\
+      Natalie & 20 & 20 & 20 & 20 & 20\\
+      Jakob & 20 & 20 & 20 & 20 & 20\\
+      Jack & 20 & 20 & 20 & 20 & 20\\
+      Alex & 20 & 20 & 20 & 20 & 20\\
+      Kento & 20 & 20 & 20 & 20 & 20\\
       \hline
-      St Dev & 29 & 29 & 29
+      St Dev & 0 & 0 & 0 & 0 & 0\\
     \end{tabular}
   \end{center}
 \end{table}
@@ -153,7 +153,7 @@ Accountable together -- we are Purdue.''}
 \subsection{Fast Gradient Sign Method}
 
 %sub-alorithm two
-\subsection{L-BFGS}
+\subsection{L-BFGS} 
 
 %sub-algorithm three
 \subsection{Jacobian-based Saliency Map Attack}
@@ -164,9 +164,32 @@ Accountable together -- we are Purdue.''}
 %sub-algorithm five:
 \subsection{Zeroth-order optimization attack}
 
+% research section
+\newpage
+Fast Gradient Sign Method \\
+
+\newpage
+L-BFGS \\
+The L-BFGS method, or the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno algorithm, was of interest to us in our research on performing adversarial attacks on image classifiers. Consistent with many other adversarial attack methods, L-BFGS would fool an image classifier by making small perturbations in an image. \\
+First, images are converted into arrays that contains all of the pixel values; these arrays are the input of the L-BFGS algorithm. The objective function of the algorithm is designed to minimize the function maximizing the likelihood of classifier misidentification; the minimax feature of this function is designed to preserve memory and improve runtime efficiency. The algorithm then changes the pixel parameters slightly and finds how the output of the image classifier is affected before iterating this process a certain number of times (the number of iterations can be defined by the user). \\
+The iterations and the data obtained from them are then stored within the algorithm, and a Hessian matrix is produced from this information. The Hessian matrix is composted of second-order partial derivates that describe the behavior of every variable within an objective function. This matrix and its eigenvalues allow the model to understand how changing pixels within the training dataset affects the image classifier's output and apply this learning to images outside of the training set.
+
+\newpage
+Jacobian-based Saliency Map Attack \\
+
+\newpage
+Deepfool Attack \\
+
+\newpage
+Zeroth-order optimization attack \\
+
+
 %sources section
 \newpage
-\section{Weighted Majority Classifier}
+\section{Weighted Majority Classifier Research}
+
+\newpage
+\section{Implementation}
 
 \newpage
 \section{Resources}
