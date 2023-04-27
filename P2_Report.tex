@@ -154,11 +154,26 @@ Accountable together -- we are Purdue.''}
 
 %sub-alorithm two
 \subsection{L-BFGS} 
-The L-BFGS method, or the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno algorithm, was of interest to us in our research on performing adversarial attacks on image classifiers. Consistent with many other adversarial attack methods, L-BFGS would fool an image classifier by making small perturbations in an image. \\
+The L-BFGS method, or the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno algorithm, was of interest to us in our research on performing adversarial attacks on image classifiers. Consistent with many other adversarial attack methods, L-BFGS would fool an image classifier by making small perturbations in an image.
+\begin{figure}[h]
+\centering
+\caption{Simple L-BFSG attack with the purpose of making an image classifier think a 5 is some other number. The first row is the perturbed image, the second row is the perturbations that were added, and the third row is the original, unperturbed image. Here, the image has been fooled into misclassifying the 3 into a 4, a 6, and an 8, respectively.}
+\includegraphics[height = 6.5cm]{l-bfsg 2.png}
+\end{figure} \\
 First, images are converted into arrays that contains all of the pixel values; these arrays are the input of the L-BFGS algorithm. The objective function of the algorithm is designed to minimize the function maximizing the likelihood of classifier misidentification; the minimax feature of this function is designed to preserve memory and improve runtime efficiency. The algorithm then changes the pixel parameters slightly and finds how the output of the image classifier is affected before iterating this process a certain number of times. The number of iterations can be defined by the user, or it could depend on some condition, like a percentage decrease in accuracy of the image classifier's predictions - in the case of our project, we would most likely implement a constraint for the algorithm to stop when the image classifier output a 49\% certainty on the correct classification of an image. \\
-The iterations and the data obtained from them are then stored within the algorithm, and a Hessian matrix is produced from this information. The Hessian matrix is composted of second-order partial derivates that describe the behavior of every variable within an objective function. This matrix and its eigenvalues allow the model to understand how changing pixels within the training dataset affects the image classifier's output and apply this learning to images outside of the training set. \\
+The iterations and the data obtained from them are then stored within the algorithm, and a Hessian matrix is produced from this information. The Hessian matrix is composted of second-order partial derivates that describe the behavior of every variable within an objective function. This matrix and its eigenvalues allow the model to understand how changing pixels within the training dataset affects the image classifier's output and apply this learning to images outside of the training set.
+\begin{figure}[h]
+\centering
+\caption{Hessian Matrix Visualization. In large datasets, it is computationally impossible to calculate every eigenvalue in the Hessian matrix - here, a set of the smallest and largest eigenvalues have been produced to represent the importance of different pixels.}
+\includegraphics[height = 5cm]{hessianMatrix.jpeg}
+\end{figure}
 It is worth noting that the L-BFGS method is a variation of the original BFGS method, which is more computationally intensive. The BFGS method calculates the entire Hessian matrix and its relevant eigenvalues for every iteration of the algorithm, rather than completing a limited number of iterations and computing a Hessian matrix based off of those, making it less ideal for neural networks and deep learning networks that contain large amounts of information or devices with less computing power. \\
 Lastly, the LP-BFGS (Limited-pixel Broyden-Fletcher-Goldfarb-Shanno) method is another, particularly compelling variation of the BFGS method that we explored in our research on adversarial attacks on image classifiers. Although it does not have a feature that limits the memory used, it could be especially applicable to the "pixel budget" factor of this project. The method of this algorithm is essentially the same as that of the BFGS and L-BFGS methods, but with one key difference: before the algorithm begins iterations to optimize the objective function, an integrated-gradient method is applied to the pixels within the image to first find which pixels are most important to the classifier's image recognition. The integrated-gradient method works by setting a sort of "baseline" that contains no data about the image classifier's predictions, or what pixels are deemed most important; then, as the model iterates through different pixels to see which ones are the most essential to image, data about the number of iterations, classification accuracy at the time of each iteration, and how much the classification accuracy was influenced are recorded over a pre-defined number of pixels. This will identify the most important pixels; finally, these pixels are then turned into variables within the objective function, and the algorithm begins its iterations to optimize the changes to just these pixels.
+\begin{figure}[h]
+\centering
+\caption{Visualization of the LP-BFGS method. Here, the integrated-gradient method has identified 4 pixels as the most important and used them as optimization variables in the objective function to perturb them.}
+\includegraphics[height = 6cm]{lp-bfgs 1.png}
+\end{figure} \\
 
 %sub-algorithm three
 \subsection{Jacobian-based Saliency Map Attack}
