@@ -154,6 +154,9 @@ Accountable together -- we are Purdue.''}
 
 %sub-alorithm two
 \subsection{L-BFGS} 
+The L-BFGS method, or the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno algorithm, was of interest to us in our research on performing adversarial attacks on image classifiers. Consistent with many other adversarial attack methods, L-BFGS would fool an image classifier by making small perturbations in an image. \\
+First, images are converted into arrays that contains all of the pixel values; these arrays are the input of the L-BFGS algorithm. The objective function of the algorithm is designed to minimize the function maximizing the likelihood of classifier misidentification; the minimax feature of this function is designed to preserve memory and improve runtime efficiency. The algorithm then changes the pixel parameters slightly and finds how the output of the image classifier is affected before iterating this process a certain number of times (the number of iterations can be defined by the user, or it could depend on some condition, like a percentage decrease in accuracy of the image classifier's predictions.) \\
+The iterations and the data obtained from them are then stored within the algorithm, and a Hessian matrix is produced from this information. The Hessian matrix is composted of second-order partial derivates that describe the behavior of every variable within an objective function. This matrix and its eigenvalues allow the model to understand how changing pixels within the training dataset affects the image classifier's output and apply this learning to images outside of the training set.
 
 %sub-algorithm three
 \subsection{Jacobian-based Saliency Map Attack}
@@ -163,26 +166,9 @@ Accountable together -- we are Purdue.''}
 
 %sub-algorithm five:
 \subsection{Zeroth-order optimization attack}
+\indent A zeroth order optimization attack is a black box attack, meaning it has access to the inputs and outputs of an image classification model, but it does not have access to the architecture of the model itself.  Most black box attacks make use of a substitute model of the neural network being attacked.  This substitute model is trained using queries input into the target model and their results as training data.  The goal is to build the substitute model and then attack the substitute with a white box attack, with the resulting attack being transferrable to the initial target classification model. This type of white box attack uses the known structure of the substitute model to be able to calculate gradients using back propagation (the goal of calculating gradients is to determine which direction to move from the current pixel in order to arrive at a more important pixel).  A zeroth order optimization differs from conventional black box since it does not use a substitute model approximation of the target model.  Instead, the gradient is estimated using a first order derivative of the loss function of the target neural network.  The hessian is also estimated by taking the second order derivative of the loss function.  While this method does not give a very numerically accurate estimate of the gradient and hessian, it is good enough to be successful in the context of an attack on an image classifier.  It is worth noting that this method is required to be used in conjunction with stochastic coordinate descent (starting at a random coordinate, finding the gradient and hessian, and calculating the best movement from that coordinate to arrive at a more significant pixel) in order to create a computationally feasible solution.  Once a significant coordinate is chosen, it is updated to a new color value using an algorithm called Adam.  	\indent The amount of pixels changed, or the amount of noise in the perturbed image is conveniently easily controllable in zeroth order optimization.  This is done by transforming the space that the algorithm is searching for pixels to change into a smaller size.  This is done mainly to decrease the number of calculations required to successfully fool the image classifier, thus decreasing computing resources spent.
 
 
-% research section
-\newpage
-Fast Gradient Sign Method \\
-
-\newpage
-L-BFGS \\
-The L-BFGS method, or the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno algorithm, was of interest to us in our research on performing adversarial attacks on image classifiers. Consistent with many other adversarial attack methods, L-BFGS would fool an image classifier by making small perturbations in an image. \\
-First, images are converted into arrays that contains all of the pixel values; these arrays are the input of the L-BFGS algorithm. The objective function of the algorithm is designed to minimize the function maximizing the likelihood of classifier misidentification; the minimax feature of this function is designed to preserve memory and improve runtime efficiency. The algorithm then changes the pixel parameters slightly and finds how the output of the image classifier is affected before iterating this process a certain number of times (the number of iterations can be defined by the user). \\
-The iterations and the data obtained from them are then stored within the algorithm, and a Hessian matrix is produced from this information. The Hessian matrix is composted of second-order partial derivates that describe the behavior of every variable within an objective function. This matrix and its eigenvalues allow the model to understand how changing pixels within the training dataset affects the image classifier's output and apply this learning to images outside of the training set.
-
-\newpage
-Jacobian-based Saliency Map Attack \\
-
-\newpage
-Deepfool Attack \\
-
-\newpage
-Zeroth-order optimization attack \\
 
 
 %sources section
