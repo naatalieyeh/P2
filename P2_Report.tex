@@ -163,14 +163,15 @@ In order to fool our machine learning algorithm, the FGSM takes in three variabl
 \end{figure}
 
 FGSM fools our machine classifier since it uses the trained model itself in order to compute the gradient by calculating the loss after propagation, essentially using the way the model works against itself. When the model tries reading the picture, it runs into a back-propagation issue regarding the way that it classifies the grass and the dandelions. These issues then lead to the misclassification of the inputs, which is our goal. One of the biggest advantages of this adversarial attack method when compared to others is that it is cheap and efficient. There are other methods, such as JBSM, which changes the image into a Jacobian Matrix in order to analyze the model’s reaction to each of the pixels. This can be rather time consuming and inefficient. It is also important to add that the linear nature of this algorithm leads to the economic and efficient aspect of this algorithm. This algorithm does have its weaknesses though, such as the fact that it is limited to linear models. This leads to a drop of efficiency with more complex algorithms. Another weakness with this algorithm is that it is vulnerable to being detected and prevented. This is because the actual image is being changed, although ever so slightly. Lastly, the simplicity of this algorithm means that it does not lead to the most efficient outcomes possible. In order to address these issues, there have been other versions of the FGSM, such as the Basic Iterative Method (BIM) and the Projected Gradient Descent (PGD).
-
+\\
+\\
 In the context of our project, we would have taken 5 main steps:
 \begin{enumerate}
-\item Set a working directory and input both the model using the load_model_tf and the images as an array using the image_to_array() function
-\item 
-\item 1
-\item 1
-\item 1
+\item Set a working directory and input both the model using the load\_model\_tf()
+\item Create a function called FGSM which takes in the model, x, y, and epsilon and returns the original image (x) with the gradient on it.
+\item Create a for loop where every image is uploaded into and turned into an array using the image\_to\_array() function. It also initializes an epsilon of 0.01.
+\item Assign \%ge\% predict(FGSM(model, x, y, e)) to a variable named "result". This stores the 
+\item Print out the larger of the two percentages along with the name of the image file.
 \end{enumerate}
 
 %sub-alorithm two
@@ -237,11 +238,18 @@ Our group decided that the best way to implement a majority voting classifier wo
 
 \newpage
 \section{Challenges}
+
 \subsection{Model}
 
 \subsection{Resources and Documentation}
+\par A major challenge our group experienced was in getting Python libraries to function in R using tensorflow.  On multiple group members computers who already had Python installed, the installation of tensorflow from within the RStudio environment encountered several errors.  The main way this challenge was addressed was by uninstalling Python, and allowing R to install Miniconda in order to get tensorflow working.  Once this problem was addressed however, we encountered errors trying to use functions from tensorflow (such as load\_model\_tf) and keras (k\_gradient). Some of these functions worked on some group members computers and not on others.  The best solution we were able to use was to perform all coding and calculations using the computers of those group members who had no issues with the tensorflow and keras packages.  
+\par Another challenge stemmed from finding many resources on implementing machine learning and image processing in Python, but very few for how to do so using R.  
+
+
 
 \subsection{Implementation}
+\par A large challenge we faced when attempting to implement the algorithms described above in R was a lack of knowledge on how to actually turn them into code. Although we were able to understand the steps of the algorithms and how they would perform an adversarial attack on the provided image classifier, most of the resources available to us included many complex equations, derivations, and objective functions. 
+\par As communicated to us by the instructors, a machine learning algorithm is extremely difficult to create by hand - in this case, it was not a lack of knowledge on the proces of the algorithms we researched, but rather a lack of knowledge on how to create the functions that drove the algorithms in R. While we considered simpler options with corresponding libraries in R, such as the rpart package for decision trees or the randomForest package for a random forest model comprised of many decision trees, we did not fully understand how to implement those options in the context of image processing, or how to complete image processing in R. Since our experience with decision trees and random forest models from the last assignment dealt with large datsets that were completely numerical, it was difficult for us to translate that knowledge about classifying positive and negative classes into something applicable to pictures with thousands of pixels.
 
 \newpage
 \section{Resources}
