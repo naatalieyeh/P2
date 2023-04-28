@@ -73,16 +73,16 @@ Accountable together -- we are Purdue.''}
 \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
-    \begin{tabular}{c|ccc|c|c}
-      Student & Research & Challenges & Report & Overall & DIFF\\
+    \begin{tabular}{c|cccc|c|c}
+      Student & Research & Report & Challenges & Attempted Implementation & Overall & Diff\\
       \hline
-      Natalie & 20 & 20 & 20 & 20 & 20\\
-      Jakob & 20 & 20 & 20 & 20 & 20\\
-      Jack & 20 & 20 & 20 & 20 & 20\\
-      Alex & 20 & 20 & 20 & 20 & 20\\
-      Kento & 20 & 20 & 20 & 20 & 20\\
+      Natalie & 25 & 25 & 25 & 25 & 100 & 0\\
+      Jakob & 25 & 25 & 25 & 25 & 100 & 0\\
+      Alex & 25 & 25 & 25 & 25 & 100 & 0\\
+      Kento & 25 & 25 & 25 & 25 & 100 & 0\\
+      Jack & 0 & 0 & 0 & 0 & 0 & -100\\
       \hline
-      St Dev & 0 & 0 & 0 & 0 & 0\\
+      St Dev & 11.2 & 11.2 & 11.2 & 11.2 & 44.7 & 44.7\\
     \end{tabular}
   \end{center}
 \end{table}
@@ -114,14 +114,14 @@ Accountable together -- we are Purdue.''}
 
     \item[\done] Your solutions were prepared using the \LaTeX template provided in Brightspace. 
     \item[\done] Your submission has a cover sheet as its first page and this checklist as its second page, according to the template provided.
-	 \item All of your solutions (program code, etc.) are included in the submission as requested. % Check this checkbox and the following ones if satisfied <---
-    \item You have not included any screen shots, photos, etc. (plots should be intermediately saved as .png files and then added into your .tex file). % <---
-	 \item All math notation and algorithms (algorithmic environment) are created using appropriate \LaTeX code (no pictures, handwritten solutions, etc.). % <---
-    \item The .pdf is submitted as an individual file and not in a {\tt .zip}.
-    \item You kept the \LaTeX source code in your files until this assignment is graded, in case you are required to show proof of creating your assignment using \LaTeX.  % <---
-    \item If submitting with a partner, your partner is added in the submission section in Gradescope after you upload your file. % <---
-    \item You have correctly matched each question to its page \# in the .pdf submission in the Gradescope section (after you uploaded your file).
-    \item Watch videos on creating pseudocode if you need a refresher or quick reference to the idea. These are good starter videos:    % <---
+	 \item[\done] All of your solutions (program code, etc.) are included in the submission as requested. % Check this checkbox and the following ones if satisfied <---
+    \item[\done] You have not included any screen shots, photos, etc. (plots should be intermediately saved as .png files and then added into your .tex file). % <---
+	 \item[\done] All math notation and algorithms (algorithmic environment) are created using appropriate \LaTeX code (no pictures, handwritten solutions, etc.). % <---
+    \item[\done] The .pdf is submitted as an individual file and not in a {\tt .zip}.
+    \item[\done] You kept the \LaTeX source code in your files until this assignment is graded, in case you are required to show proof of creating your assignment using \LaTeX.  % <---
+    \item[\done] If submitting with a partner, your partner is added in the submission section in Gradescope after you upload your file. % <---
+    \item[\done] You have correctly matched each question to its page \# in the .pdf submission in the Gradescope section (after you uploaded your file).
+    \item[\done] Watch videos on creating pseudocode if you need a refresher or quick reference to the idea. These are good starter videos:    % <---
     
      \HREF{https://www.youtube.com/watch?v=4jLO0vXPktU}{www.youtube.com/watch?v=4jLO0vXPktU} 
     
@@ -191,7 +191,6 @@ In the context of our project, we would have taken 5 main steps:
 \end{figure}
 \par It is worth noting that the L-BFGS method is a variation of the original BFGS method, which is more computationally intensive. The BFGS method calculates the entire Hessian matrix and its relevant eigenvalues for every iteration of the algorithm, rather than completing a limited number of iterations and computing a Hessian matrix based off of those, making it less ideal for neural networks and deep learning networks that contain large amounts of information or devices with less computing power. \\
 \par Lastly, the LP-BFGS (Limited-pixel Broyden-Fletcher-Goldfarb-Shanno) method is another, particularly compelling variation of the BFGS method that we explored in our research on adversarial attacks on image classifiers. Although it does not have a feature that limits the memory used, it could be especially applicable to the "pixel budget" factor of this project. The method of this algorithm is essentially the same as that of the BFGS and L-BFGS methods, but with one key difference: before the algorithm begins iterations to optimize the objective function, an integrated-gradient method is applied to the pixels within the image to first find which pixels are most important to the classifier's image recognition. The integrated-gradient method works by setting a sort of "baseline" that contains no data about the image classifier's predictions, or what pixels are deemed most important; then, as the model iterates through different pixels to see which ones are the most essential to image, data about the number of iterations, classification accuracy at the time of each iteration, and how much the classification accuracy was influenced are recorded over a pre-defined number of pixels. This will identify the most important pixels; finally, these pixels are then turned into variables within the objective function, and the algorithm begins its iterations to optimize the changes to just these pixels.
-\newpage
 \begin{figure}[h]
 \centering
 \caption{Visualization of the LP-BFGS method. Here, the integrated-gradient method has identified 4 pixels as the most important and used them as optimization variables in the objective function to perturb them.}
@@ -230,11 +229,24 @@ In the context of our project, we would have taken 5 main steps:
 \item Display the test dataset images that fooled the classifier to show an example of successful adversarial attack.
 \end{enumerate}
 
-
-\newpage
 %sub-algorithm four
 \subsection{Deepfool Attack}
-
+\par The Deepfool Algorithm is an untargeted gradient-based attack (where the purpose of the attack is so that the machine learning system misclassifies input data by generating perturbations to the data). Its main goal is to minimize the euclidean distance between perturbed samples and original samples by calculating the minimal perturbation. In the case of an adversarial attack on an image classifier, minimal perturbation is the main function by which the original image classification algorithm will misclassify the input image. It works as follows:
+\par An initial prediction of the input image, f($x_{0}$), is generated by executing the image classification algorithm. The gradient of the image classification algorithm’s decision boundary (the constraints that determine the class that the input image would belong to) is calculated using f($x_{0}$). This calculation determines the direction that is most sensitive to any manipulations performed on the input image.
+\par Then, minimal perturbation, or the smallest perturbation required to move from one boundary to the other, is found using the following formula: $r_{*}(x_{i}) = -\frac{f(x_{i})}{\left\| \omega \right\|^{2}_{2}}\omega$. Here, f($x_{0}$) is the output prediction of the original image, f($x_{i}$) is the output prediction of the perturbed image, $\omega$ is the gradient of the loss function, and ${\left\| \omega \right\|^{2}_{2}}$ is the L2-norm (calculates the distance of the vector coordinate from the origin of the vector space) of the computed gradient of the loss function. It is important to note that perturbation is minimal only if the projection of the input image x0 onto the hyperparameter plane (where one class is separated from the other) is orthogonal. The perturbation, $r_{*}(x_{i})$,  is then applied to the input image, x, and updated.
+\par Steps 3-4 are repeated until the class of the perturbed image is no longer the same as the class of the original image (misclassification occurs). Finally, the minimal perturbation, $\hat{r}$ is calculated by taking the sum of each $r_{*}$ from 0 to the $i^{th}$ iteration and outputted.
+\begin{figure}[h]
+\centering
+\caption{Visual example of the deepfool algorithm. Here, perturbations have been added to an image of a whale to fool an image classifier into classifying the picture as a turtle. The unperturbed image is on top, the perturbed image is on the bottom left, and the perturbations are shown on the bottom right.}
+\includegraphics[height = 4cm]{deepfool 3.png}
+\end{figure} 
+\begin{figure}[h]
+\centering
+\caption{Example pseudocode for a deepfool adversarial attack on a binary image classifier.}
+\includegraphics[height = 4cm]{deepfool 1.png}
+\end{figure}
+\par One unique aspect of the deepfool algorithm is that it fools the image classifier through an iterative process where iterations of perturbations with minimized L2 distance are added, whereas the majority of the other methods fool the original algorithm through  backpropagation. However, it should be noted that these repeated iterations make the deepfool process more computationally expensive than other methods, like FGSM.
+\newpage
 %sub-algorithm five:
 \subsection{Zeroth-order optimization attack}
 \hspace{\parindent} A zeroth order optimization attack is a black box attack, meaning it has access to the inputs and outputs of an image classification model, but it does not have access to the architecture of the model itself.  Most black box attacks make use of a substitute model of the neural network being attacked.  This substitute model is trained using queries input into the target model and their results as training data.  The goal is to build the substitute model and then attack the substitute with a white box attack, with the resulting attack being transferable to the initial target classification model. This type of white box attack uses the known structure of the substitute model to be able to calculate gradients using back propagation (the goal of calculating gradients is to determine which direction to move from the current pixel in order to arrive at a more important pixel).  A zeroth order optimization differs from conventional black box since it does not use a substitute model approximation of the target model.  Instead, the gradient is estimated using a finite difference method of the loss function of the target neural network.  The hessian is also estimated using the same method.  While this method does not give a very numerically accurate estimate of the gradient and hessian, it is good enough to be successful in the context of an attack on an image classifier.  It is worth noting that this method is required to be used in conjunction with stochastic coordinate descent (starting at a random coordinate, finding the gradient and hessian, and calculating the best update to that coordinate) in order to create a computationally feasible solution.  Once a significant coordinate is chosen, it is updated to a new color value using an optimization algorithm for gradient descent called Adam. 
@@ -294,6 +306,8 @@ In the context of our project, we would have taken 5 main steps:
 
 \newpage
 \section{Resources}
+\noindent Arc. (2019, May 18). DeepFool - a simple and accurate method to fool deep neural networks. Medium. Retrieved April 28, 2023, from https://towardsdatascience.com/deepfool-a-simple-and-accurate-method-to-fool-deep-neural-networks-17e0d0910ac0 \\
+
 \noindent Aung, A. M., Fadila, Y., Gondokaryono, R., \& Gonzalez, L. (n.d.). Building Robust Deep Neural Networks \indent for Road Sign Detection. \\
 
 \noindent Boesch, G. (2023, January 2). What is adversarial machine learning? attack methods in 2023. viso.ai. \indent Retrieved April 28, 2023, from https://viso.ai/deep-learning/adversarial-machine-learning/ \\
@@ -309,6 +323,10 @@ In the context of our project, we would have taken 5 main steps:
 \noindent Kingma, D., \& Ba, J. (n.d.). ADAM: A Method for Stochastic Optimization. \emph{International Conference \indent on Learning Representations.} https://doi.org/https://doi.org/10.48550/arXiv.1412.6980 \\
 
 \noindent LossLandscape. (2022, October 6). Learn about how the A.I, Deep Learning Loss Landscape Project works. \indent LossLandscape. Retrieved April 28, 2023, from https://losslandscape.com/faq/ \\
+
+\noindent Moosavi-Dezfooli, S.-M., Fawzi, A., & Frossard, P. (2016). DeepFool: a simple and accurate method to fool deep neural networks. ArXiv [Cs.LG]. Retrieved from http://arxiv.org/abs/1511.04599 \\
+
+\noindent Morgan, A. (2022, May 2). A review of DeepFool: A simple and accurate method to fool Deep Neural Networks. Medium. Retrieved April 28, 2023, from https://medium.com/machine-intelligence-and-deep-learning-lab/a-review-of-deepfool-a-simple-and-accurate-method-to-fool-deep-neural-networks-b016fba9e48e
 
 \noindent Ren, K., Zheng, T., Qin, Z., \& Liu, X. (2020). Adversarial attacks and defenses in Deep Learning. \indent \emph{Engineering, 6(3), 346–360.} https://doi.org/10.1016/j.eng.2019.12.012 \\
 
