@@ -9,6 +9,7 @@
 \usepackage{mathtools}
 \usepackage{hyperref,color}
 \usepackage{enumitem,amssymb}
+\usepackage{indentfirst}
 \newlist{todolist}{itemize}{4}
 \setlist[todolist]{label=$\square$}
 \usepackage{pifont}
@@ -151,8 +152,7 @@ Accountable together -- we are Purdue.''}
 
 %sub-algorithm one
 \subsection{Fast Gradient Sign Method}
-With respect to adversarial attacks, the Fast Gradient Sign Method (FGSM) is one of the most popular and widely employed. This method was first theorized in 2015 by Stanford professor Ian J. Goodfellow and his colleagues in the paper EXPLAINING AND HARNESSING
-ADVERSARIAL EXAMPLES [ICLR 2015]. They noticed that the current neural networks are too linear and suggest that some cheap, yet analytical perturbations of the linear model can alter the neural networks. They came to this conclusion after analyzing the LSTMs, ReLUs, and maxout networks, which are all designed to work in linear, yet effective ways. \\
+With respect to adversarial attacks, the Fast Gradient Sign Method (FGSM) is one of the most popular and widely employed. This method was first theorized in 2015 by Stanford professor Ian J. Goodfellow and his colleagues in the paper EXPLAINING AND HARNESSING ADVERSARIAL EXAMPLES [ICLR 2015]. They noticed that the current neural networks are too linear and suggest that some cheap, yet analytical perturbations of the linear model can alter the neural networks. They came to this conclusion after analyzing the LSTMs, ReLUs, and maxout networks, which are all designed to work in linear, yet effective ways. \\
 
 In order to fool our machine learning algorithm, the FGSM takes in three variables; the input image, the trained model, and epsilon. The first step is to take the input image (x), the parameters of the model (theta), and the targets associated with the input image (y) in order to compute J(theta, x, y). This is calculated with the means to linearize the function around the parameters of the model (theta). This will return the optimal max value of the vector (optimal max-norm). This max value of the vector is also known as the gradient, which will eventually be multiplied by epsilon and added to the image. Epsilon is a decimal value from zero to one which determines the magnitude of the perturbation on the gradient once added to the original image. Different epsilons lead to different confidence percentages. A higher epsilon does not mean a higher confidence percentage, therefore it is best to create a graph which will plot out the different epsilons with respect to the erroneous confidence percentages in order to find the optimal epsilon. Once the final image is created, we input the image into our model and finally get to see that the model has been fooled.
 
@@ -164,7 +164,14 @@ In order to fool our machine learning algorithm, the FGSM takes in three variabl
 
 FGSM fools our machine classifier since it uses the trained model itself in order to compute the gradient by calculating the loss after propagation, essentially using the way the model works against itself. When the model tries reading the picture, it runs into a back-propagation issue regarding the way that it classifies the grass and the dandelions. These issues then lead to the misclassification of the inputs, which is our goal. One of the biggest advantages of this adversarial attack method when compared to others is that it is cheap and efficient. There are other methods, such as JBSM, which changes the image into a Jacobian Matrix in order to analyze the model’s reaction to each of the pixels. This can be rather time consuming and inefficient. It is also important to add that the linear nature of this algorithm leads to the economic and efficient aspect of this algorithm. This algorithm does have its weaknesses though, such as the fact that it is limited to linear models. This leads to a drop of efficiency with more complex algorithms. Another weakness with this algorithm is that it is vulnerable to being detected and prevented. This is because the actual image is being changed, although ever so slightly. Lastly, the simplicity of this algorithm means that it does not lead to the most efficient outcomes possible. In order to address these issues, there have been other versions of the FGSM, such as the Basic Iterative Method (BIM) and the Projected Gradient Descent (PGD).
 
-
+In the context of our project, we would have taken 5 main steps:
+\begin{enumerate}
+\item Set a working directory and input both the model using the load_model_tf and the images as an array using the image_to_array() function
+\item 
+\item 1
+\item 1
+\item 1
+\end{enumerate}
 
 %sub-alorithm two
 \subsection{L-BFGS} 
@@ -192,7 +199,7 @@ FGSM fools our machine classifier since it uses the trained model itself in orde
 
 %sub-algorithm three
 \subsection{Jacobian-based Saliency Map Attack}
-\par In contrast to the L-BFGS method, which inputs an already perturbed image into the image classifier, the Jacobian-based Saliency Map Attack (JBSM) method for adversarial attack uses the output of the image classifier's prediction on an unperturbed image to learn which pixels should be perturbed. The JBSM method turns the image classifier's prediciton on the original, untouched image into a Jacobian matrix, which is a matrix of first-order partial derivatives of the variables in a function that describes the behavior of the image classifier with respect to each of the pixels contained in the input image. This Jacobian matrix allows the algorithm to deduce which pixels are the most important in the image classification model's prediction process by creating a saliency map. Buildling the saliency map involves using the gradient of the function describing the image classifier's behavior to determine how perturbing certain pixels will decrease or increase the accuracy of the image classifier and iterating this process. This saliency map most often takes some type of "heat map" form where pixels in an image are highlighted in different colors based on their importance to the image classifier's recognition of the image's class. After the map is created, the most salient, or important, pixels are selected. These pixels are perturbed and added to the image; the image is fed into the image classifier, and the entire algorithm repeats itself until a satisfactory result is reached.
+\par In contrast to the L-BFGS method, which inputs an already perturbed image into the image classifier, the Jacobian-based Saliency Map Attack (JBSM) method for adversarial attack uses the output of the image classifier's prediction on an unperturbed image to learn which pixels should be perturbed. The JBSM method turns the image classifier's predicton on the original, untouched image into a Jacobian matrix, which is a matrix of first-order partial derivatives of the variables in a function that describes the behavior of the image classifier with respect to each of the pixels contained in the input image. This Jacobian matrix allows the algorithm to deduce which pixels are the most important in the image classification model's prediction process by creating a saliency map. Building the saliency map involves using the gradient of the function describing the image classifier's behavior to determine how perturbing certain pixels will decrease or increase the accuracy of the image classifier and iterating this process. This saliency map most often takes some type of "heat map" form where pixels in an image are highlighted in different colors based on their importance to the image classifier's recognition of the image's class. After the map is created, the most salient, or important, pixels are selected. These pixels are perturbed and added to the image; the image is fed into the image classifier, and the entire algorithm repeats itself until a satisfactory result is reached.
 \begin{figure}[h]
 \centering
 \caption{Visualization of the Jacobian matrix. A 3-D plot of the matrix of partial derivatives is shown on the right, and level curves are shown on the right.}
@@ -215,19 +222,30 @@ FGSM fools our machine classifier since it uses the trained model itself in orde
 \par The amount of pixels changed, or the amount of noise in the perturbed image is conveniently easily controllable in zeroth order optimization.  This is done by transforming the space that the algorithm is searching for pixels to change into a smaller size.  This is done mainly to decrease the number of calculations required to successfully fool the image classifier, thus decreasing computing resources spent.
 \par This algorithm would fool the classifier with subtle (by human visual standards) perturbations of certain pixels located throughout the attack area of an image.  This attack area can be adjusted and increased as necessary to increase the effectiveness at the cost of more computational power being required.  The change to the image is calculated by first evaluating the loss function of the classifier on the target image, then going through the steps described above to arrive at a perturbation.  The noise added to the image is not cohesive in any way, which not only fools the classifier but makes the algorithm harder to defend against than algorithms using an adversarial patch.  The image with this perturbation is then input back into the target classifier. 
 
-
-
-
 %sources section
 \newpage
 \section{Weighted Majority Classifier Research}
 
+A majority voting classifier is a classifier that takes into account the accuracy of a number of different algorithms and outputs the prediction of the algorithm it deems to be the best. There are two main types of majority voting classifiers that we considered using in the context of this project.\\
+
+A simple majority classifier, in the case of image processing and adversarial attack, would include multiple image classifiers present that each take a vote on one sub-algorithm that is best at fooling the image recognition. From there, the sub-algorithm with the most votes “wins” the vote, and the simple majority classifier will select the set of pixels that the winning sub-algorithm added perturbations to.\\
+
+A weighted majority classifier is slightly different from a simple majority classifier. The first step a weighted majority classifier takes is to distribute weights to each of the sub-algorithms themselves. In the case of our project, sub-algorithms that trick the image classifier into misclassifying the image most often would receive higher weights. After this, the output of the sub-algorithms are multiplied by each corresponding weight in order to get the final, combined prediction. The output would consist of the set of pixels that the single best sub-algorithm changed.\\
+
+Our group decided that the best way to implement a majority voting classifier would be to train the sub-algorithms using cross-validation (using the same set of training data and the same set of testing data on all five algorithms) and then use a weighted majority classifier to find the best sub-algorithm. Simple majority classifiers usually rely on the votes of multiple image classifiers, and in this project, we only have one image classifier; a weighted majority classifier assigns weights to each of the sub-algorithms’ effect on the output of the image classifier, which makes it a suitable choice for us.
+
+
 \newpage
-\section{Implementation}
+\section{Challenges}
+\subsection{Model}
+
+\subsection{Resources and Documentation}
+
+\subsection{Implementation}
 
 \newpage
 \section{Resources}
-Kingma, D. P., &amp; Ba, J. (2015). Adam: A Method for Stochastic Optimization. 
+Kingma, D. P., &amp; Ba, J. (2015). Adam: A Method for Stochastic Optimization.
 
 Chen, P.-Y., Zhang, H., Sharma, Y., Yi, J., &amp; Hsieh, C.-J. (2017). ZOO: Zeroth Order Optimization Based Black-box Attacks to Deep Neural Networks without Training Substitute Models. 
 \end{document}
