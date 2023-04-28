@@ -74,7 +74,7 @@ Accountable together -- we are Purdue.''}
   \begin{center}
     \label{tab:table1}
     \begin{tabular}{c|ccc|c|c}
-      Student & Research & Implementation & Report & Overall & DIFF\\
+      Student & Research & Challenges & Report & Overall & DIFF\\
       \hline
       Natalie & 20 & 20 & 20 & 20 & 20\\
       Jakob & 20 & 20 & 20 & 20 & 20\\
@@ -167,11 +167,11 @@ FGSM fools our machine classifier since it uses the trained model itself in orde
 \\
 In the context of our project, we would have taken 5 main steps:
 \begin{enumerate}
-\item Set a working directory and input both the model using the load\_model\_tf()
+\item Set a working directory and input the model using the load\_model\_tf().
 \item Create a function called FGSM which takes in the model, x, y, and epsilon and returns the original image (x) with the gradient on it.
-\item Create a for loop where every image is uploaded into and turned into an array using the image\_to\_array() function. It also initializes an epsilon of 0.01.
-\item Assign \%ge\% predict(FGSM(model, x, y, e)) to a variable named "result". This stores the 
-\item Print out the larger of the two percentages along with the name of the image file.
+\item Create a for loop where every image in the "Dandelions" folder is uploaded into and turned into an array using the image\_to\_array() function. It also initializes an epsilon of 0.01.
+\item Assign "model \%greater than\% predict(FGSM(model, x, y, e))" to a variable named "result". This uses the predict with respect to the model and the output of the function FGSM.
+\item Print out the larger of the two percentages along with the name of the image file and run again with the folder containing the true "Grass" images.
 \end{enumerate}
 
 %sub-alorithm two
@@ -197,6 +197,14 @@ In the context of our project, we would have taken 5 main steps:
 \caption{Visualization of the LP-BFGS method. Here, the integrated-gradient method has identified 4 pixels as the most important and used them as optimization variables in the objective function to perturb them.}
 \includegraphics[height = 6cm]{lp-bfgs 1.png}
 \end{figure} 
+In the context of our project, we would have taken 5 main steps:
+\begin{enumerate}
+\item Set a working directory and input the model using the load\_model\_tf()
+\item Create a function called LBFGS with an objective function (as described above) that minimizes the function maximizing the decrease in image classifier prediction accuracy.
+\item Create a for loop that puts each image of the training set through the LBFGS objective function that analyzes pixels and perturbs them, and that ends when the image classifier is 49\% certain on the correct classification of an image. The for loop will calculate the gradient of the objective function for pixels in the image to decide which ones should be perturbed.
+\item Use the trained LBFGS algorithm on the test dataset, and put these perturbed images into the classifier.
+\item Feed the perturbed test images into the image classifier, and display the test dataset images that fooled the classifier to show an example of successful adversarial attack.
+\end{enumerate}
 
 %sub-algorithm three
 \subsection{Jacobian-based Saliency Map Attack}
@@ -211,7 +219,17 @@ In the context of our project, we would have taken 5 main steps:
 \centering
 \caption{Example of the progression of a JBSM algorithm. The first image is the original, unperturbed image, the second is a saliency map describing important pixels, the third image contains the most important pixels discovered after several iterations of the JBSM algorithm, and the fourth image shows the original picture with perturbations added. In this case, the JBSM algorithm has fooled an image classifier into thinking that a number 0 is a number 8.}
 \includegraphics[height = 5.5cm]{jbsm 3.png}
-\end{figure} 
+\end{figure}
+\newpage
+In the context of our project, we would have taken 5 main steps:
+\begin{enumerate}
+\item Set a working directory and input the model using the load\_model\_tf().
+\item Create a function called JBSM that creates the Jacobian matrix from the prediction outputs of the image classifier on an untouched image, and initialize a for loop that puts each image of the training set through the Jacobian matrix and gradient calculations. The for loop will end when the image classifier is 49\% certain on the correct image classification
+\item Use the calculations produced to create the saliency map of the image to determine which pixels are the most important, and perturb the pixels selected as the most important ones.
+\item Use the trained JBSM algorithm on the test dataset, and feed these perturbed images into the classifier.
+\item Display the test dataset images that fooled the classifier to show an example of successful adversarial attack.
+\end{enumerate}
+
 
 \newpage
 %sub-algorithm four
@@ -219,41 +237,84 @@ In the context of our project, we would have taken 5 main steps:
 
 %sub-algorithm five:
 \subsection{Zeroth-order optimization attack}
-\hspace{\parindent} A zeroth order optimization attack is a black box attack, meaning it has access to the inputs and outputs of an image classification model, but it does not have access to the architecture of the model itself.  Most black box attacks make use of a substitute model of the neural network being attacked.  This substitute model is trained using queries input into the target model and their results as training data.  The goal is to build the substitute model and then attack the substitute with a white box attack, with the resulting attack being transferable to the initial target classification model. This type of white box attack uses the known structure of the substitute model to be able to calculate gradients using back propagation (the goal of calculating gradients is to determine which direction to move from the current pixel in order to arrive at a more important pixel).  A zeroth order optimization differs from conventional black box since it does not use a substitute model approximation of the target model.  Instead, the gradient is estimated using a first order derivative of the loss function of the target neural network.  The hessian is also estimated by taking the second order derivative of the loss function.  While this method does not give a very numerically accurate estimate of the gradient and hessian, it is good enough to be successful in the context of an attack on an image classifier.  It is worth noting that this method is required to be used in conjunction with stochastic coordinate descent (starting at a random coordinate, finding the gradient and hessian, and calculating the best movement from that coordinate to arrive at a more significant pixel) in order to create a computationally feasible solution.  Once a significant coordinate is chosen, it is updated to a new color value using an algorithm called Adam. 
+\hspace{\parindent} A zeroth order optimization attack is a black box attack, meaning it has access to the inputs and outputs of an image classification model, but it does not have access to the architecture of the model itself.  Most black box attacks make use of a substitute model of the neural network being attacked.  This substitute model is trained using queries input into the target model and their results as training data.  The goal is to build the substitute model and then attack the substitute with a white box attack, with the resulting attack being transferable to the initial target classification model. This type of white box attack uses the known structure of the substitute model to be able to calculate gradients using back propagation (the goal of calculating gradients is to determine which direction to move from the current pixel in order to arrive at a more important pixel).  A zeroth order optimization differs from conventional black box since it does not use a substitute model approximation of the target model.  Instead, the gradient is estimated using a finite difference method of the loss function of the target neural network.  The hessian is also estimated using the same method.  While this method does not give a very numerically accurate estimate of the gradient and hessian, it is good enough to be successful in the context of an attack on an image classifier.  It is worth noting that this method is required to be used in conjunction with stochastic coordinate descent (starting at a random coordinate, finding the gradient and hessian, and calculating the best update to that coordinate) in order to create a computationally feasible solution.  Once a significant coordinate is chosen, it is updated to a new color value using an optimization algorithm for gradient descent called Adam. 
 \par The amount of pixels changed, or the amount of noise in the perturbed image is conveniently easily controllable in zeroth order optimization.  This is done by transforming the space that the algorithm is searching for pixels to change into a smaller size.  This is done mainly to decrease the number of calculations required to successfully fool the image classifier, thus decreasing computing resources spent.
-\par This algorithm would fool the classifier with subtle (by human visual standards) perturbations of certain pixels located throughout the attack area of an image.  This attack area can be adjusted and increased as necessary to increase the effectiveness at the cost of more computational power being required.  The change to the image is calculated by first evaluating the loss function of the classifier on the target image, then going through the steps described above to arrive at a perturbation.  The noise added to the image is not cohesive in any way, which not only fools the classifier but makes the algorithm harder to defend against than algorithms using an adversarial patch.  The image with this perturbation is then input back into the target classifier. 
+\par This algorithm would fool the classifier with subtle (by human visual standards) perturbations of certain pixels located throughout the attack area of an image.  This attack area can be adjusted and increased as necessary to increase the effectiveness at the cost of more computational power being required.  The change to the image is calculated by first evaluating the loss function of the classifier on the target image, then going through the steps described above to arrive at a perturbation.  The noise added to the image is not cohesive in any way, which not only fools the classifier but makes the algorithm harder to defend against than algorithms using an adversarial patch.  The image with this perturbation is then input back into the target classifier. In order to implement this algorithm, we would use the following steps:
+\begin{enumerate}
+\item Load the model using load\_model\_tf.
+\item Input the target image into the image classifier and store output.
+\item Define a function to calculate the loss function for a given image based on the output of the image classifier.
+\item Define a function to estimate the gradient and hessian based on the result of the loss function.
+\item Define a function to calculate the update to a given pixel with the ADAM algorithm, using the estimated gradient and hessian, along with a starting coordinate.
+\item Create a transformation of the image desired to be attacked into an attack space of the desired size.
+\item Iterate through the above functions to update pixels in the attack space.
+\item Transform the attack space with the updates back into it's original dimensions.
+\item Input the updated image into the image classifier.
+
+\end{enumerate}
 
 %sources section
 \newpage
 \section{Weighted Majority Classifier Research}
 
-A majority voting classifier is a classifier that takes into account the accuracy of a number of different algorithms and outputs the prediction of the algorithm it deems to be the best. There are two main types of majority voting classifiers that we considered using in the context of this project.\\
+\par A majority voting classifier is a classifier that takes into account the accuracy of a number of different algorithms and outputs the prediction of the algorithm it deems to be the best. There are two main types of majority voting classifiers that we considered using in the context of this project.
+\par A simple majority classifier, in the case of image processing and adversarial attack, would include multiple image classifiers present that each take a vote on one sub-algorithm that is best at fooling the image recognition. From there, the sub-algorithm with the most votes “wins” the vote, and the simple majority classifier will select the set of pixels that the winning sub-algorithm added perturbations to.
+\par A weighted majority classifier is slightly different from a simple majority classifier. The first step a weighted majority classifier takes is to distribute weights to each of classifieres themselves. The individual classifiers then place percentage weights on each of the algorithms; at the end, the algorithm with the highest sum of weights is selected as the best one. In the case of our project, sub-algorithms that trick the image classifier into misclassifying the image most often would receive higher weights. The output then consists of the set of pixels that the algorithm with the highest weight perturbed.
+\par Our group decided that either one of the two types of majority voting classifiers described above would work equally well for our project. Since we only have one image classifier model, both types of voting classifiers would accomplish the same thing in a very similar way: either by our single classifier voting on one sub-algorithm whose perturbed pixels will become the output (in the case of the hard voting, single majority classifier), or by our single classifier placing the highest weight on a sub-algorithm whose perturbed pixels will become the output (in the case of the soft voting, weighted majority classifier).
 
-A simple majority classifier, in the case of image processing and adversarial attack, would include multiple image classifiers present that each take a vote on one sub-algorithm that is best at fooling the image recognition. From there, the sub-algorithm with the most votes “wins” the vote, and the simple majority classifier will select the set of pixels that the winning sub-algorithm added perturbations to.\\
-
-A weighted majority classifier is slightly different from a simple majority classifier. The first step a weighted majority classifier takes is to distribute weights to each of the sub-algorithms themselves. In the case of our project, sub-algorithms that trick the image classifier into misclassifying the image most often would receive higher weights. After this, the output of the sub-algorithms are multiplied by each corresponding weight in order to get the final, combined prediction. The output would consist of the set of pixels that the single best sub-algorithm changed.\\
-
-Our group decided that the best way to implement a majority voting classifier would be to train the sub-algorithms using cross-validation (using the same set of training data and the same set of testing data on all five algorithms) and then use a weighted majority classifier to find the best sub-algorithm. Simple majority classifiers usually rely on the votes of multiple image classifiers, and in this project, we only have one image classifier; a weighted majority classifier assigns weights to each of the sub-algorithms’ effect on the output of the image classifier, which makes it a suitable choice for us.
-
+\begin{figure}[h]
+\centering
+\caption{Visual representation of a "hard voting" or simple majority classifier; models vote on the most effective algorithm. Here, algorithm 1 has one the most votes and will be selected as the algorithm.}
+\includegraphics[height = 5.5cm]{hard voting.png}
+\end{figure}
 
 \newpage
+\begin{figure}[h]
+\centering
+\caption{Visual representation of a "soft voting", or weighted majority, classifier. }
+\includegraphics[height = 7cm]{soft voting.png}
+\end{figure}
+
+
 \section{Challenges}
 
 \subsection{Model}
+\par One of the challenges that we faced was the uploading of the model files to R. The code given on the video uploaded to Brightspace did not work for some of our teammates, while it did for others. Specifically, some got the “Error in load\_model\_tf(‘./dandelion\_model’) : could not find function ‘load\_model\_tf’” error, while others got “Error: tensorflow.python.framework.errors\_impl.OpError: not an sstable (bad magic number)”. Regarding the first issue, it is important to clarify that the people getting the error tried installing the "tensorflow" package multiple times, along with a extra package called "pillow". These errors prevented 
+
 
 \subsection{Resources and Documentation}
 \par A major challenge our group experienced was in getting Python libraries to function in R using tensorflow.  On multiple group members computers who already had Python installed, the installation of tensorflow from within the RStudio environment encountered several errors.  The main way this challenge was addressed was by uninstalling Python, and allowing R to install Miniconda in order to get tensorflow working.  Once this problem was addressed however, we encountered errors trying to use functions from tensorflow (such as load\_model\_tf) and keras (k\_gradient). Some of these functions worked on some group members computers and not on others.  The best solution we were able to use was to perform all coding and calculations using the computers of those group members who had no issues with the tensorflow and keras packages.  
-\par Another challenge stemmed from finding many resources on implementing machine learning and image processing in Python, but very few for how to do so using R.  
+\par Another challenge stemmed from finding many resources on implementing machine learning and image processing in Python, but very few for how to do so using R.  A major reason this led to confusion for our group is because Python is a heavily object oriented language, while R is classified more as a functional language.  This resulted in confusion and encountering many errors when trying to implement suggestions and solutions into our R code.  We were not able to find a real solution to this issue, which is another main reason why we were not able to construct a working final solution.  One potential solution we considered was to write code in Python, then try to access it using tensorflow, but we quickly discarded this option as all our code for the project was required to be in R.
 
 
 
 \subsection{Implementation}
 \par A large challenge we faced when attempting to implement the algorithms described above in R was a lack of knowledge on how to actually turn them into code. Although we were able to understand the steps of the algorithms and how they would perform an adversarial attack on the provided image classifier, most of the resources available to us included many complex equations, derivations, and objective functions. 
-\par As communicated to us by the instructors, a machine learning algorithm is extremely difficult to create by hand - in this case, it was not a lack of knowledge on the proces of the algorithms we researched, but rather a lack of knowledge on how to create the functions that drove the algorithms in R. While we considered simpler options with corresponding libraries in R, such as the rpart package for decision trees or the randomForest package for a random forest model comprised of many decision trees, we did not fully understand how to implement those options in the context of image processing, or how to complete image processing in R. Since our experience with decision trees and random forest models from the last assignment dealt with large datsets that were completely numerical, it was difficult for us to translate that knowledge about classifying positive and negative classes into something applicable to pictures with thousands of pixels.
+\par As communicated to us by the instructors, a machine learning algorithm is extremely difficult to create by hand - in this case, it was not a lack of knowledge on the process of the algorithms we researched, but rather a lack of knowledge on how to create the functions that drove the algorithms in R. While we considered simpler options with corresponding libraries in R, such as the rpart package for decision trees or the randomForest package for a random forest model comprised of many decision trees, we did not fully understand how to implement those options in the context of image processing, or how to complete image processing in R. Since our experience with decision trees and random forest models from the last assignment dealt with large datsets that were completely numerical, it was difficult for us to translate that knowledge about classifying positive and negative classes into something applicable to pictures with thousands of pixels.
 
 \newpage
 \section{Resources}
-Kingma, D. P., &amp; Ba, J. (2015). Adam: A Method for Stochastic Optimization.
+\noindent Aung, A. M., Fadila, Y., Gondokaryono, R., \& Gonzalez, L. (n.d.). Building Robust Deep Neural Networks \indent for Road Sign Detection. \\
 
-Chen, P.-Y., Zhang, H., Sharma, Y., Yi, J., &amp; Hsieh, C.-J. (2017). ZOO: Zeroth Order Optimization Based Black-box Attacks to Deep Neural Networks without Training Substitute Models. 
+\noindent Boesch, G. (2023, January 2). What is adversarial machine learning? attack methods in 2023. viso.ai. \indent Retrieved April 28, 2023, from https://viso.ai/deep-learning/adversarial-machine-learning/ \\
+
+\noindent Chen, P.-Y., Zhang, H., Sharma, Y., Yi, J., \& Hsieh, C.-J. (2017). ZOO. \emph{Proceedings of the 10th ACM \indent Workshop on Artificial Intelligence and Security.} https://doi.org/10.1145/3128572.3140448 \\
+
+\noindent Combey, T., Loison, A., Faucher, M., \& Hajri, H. (2020). Probabilistic jacobian-based saliency maps \indent attacks. \emph{Machine Learning and Knowledge Extraction, 2(4), 558–578.} https://doi.org/10.3390/make2040030 \\
+
+\noindent Data Base Camp. (2021, December 17). Explainable AI: Integrated gradients. Data Base Camp. Retrieved \indent April 28, 2023, from https://databasecamp.de/en/ml/integrated-gradients-nlp \\
+
+\noindent Karli, B. T., Sen, D., \& Temizen, A. (2022). Improving Perceptual Quality of Adversarial Images Using \indent Perceptual Distance Minimization and Normalized Variance Weighting. \\
+
+\noindent Kingma, D., \& Ba, J. (n.d.). ADAM: A Method for Stochastic Optimization. \emph{International Conference \indent on Learning Representations.} https://doi.org/https://doi.org/10.48550/arXiv.1412.6980 \\
+
+\noindent LossLandscape. (2022, October 6). Learn about how the A.I, Deep Learning Loss Landscape Project works. \indent LossLandscape. Retrieved April 28, 2023, from https://losslandscape.com/faq/ \\
+
+\noindent Ren, K., Zheng, T., Qin, Z., \& Liu, X. (2020). Adversarial attacks and defenses in Deep Learning. \indent \emph{Engineering, 6(3), 346–360.} https://doi.org/10.1016/j.eng.2019.12.012 \\
+
+\noindent Saeed, M. (2022, March 15). A gentle introduction to Hessian matrices. MachineLearningMastery.com. \indent Retrieved April 28, 2023, from https://machinelearningmastery.com/a-gentle-introduction-to-hessian-\indent matrices/ \\
+
+\noindent Shukla, P. (2022, November 21). Top interview questions on voting ensembles in machine learning. Analytics \indent Vidhya. Retrieved April 28, 2023, from https://www.analyticsvidhya.com/blog/2022/11/top-interview-\indent questions-on-voting-ensembles-in-machine-learning/ \\
+
+\noindent Wiyatno, R., \& Xu, A. (n.d.). Maximal Jacobian-based Saliency Map Attack. 
 \end{document}
